@@ -7,7 +7,7 @@ Englische EPUB-Bücher auf dem iPad lesen – ein Wort antippen und sofort die d
 
 ## Auf dem iPad nutzen
 
-1. Die Adresse der App in **Safari** öffnen: https://rks-creator.github.io/readerapp/
+1. Die Adresse der App in **Safari** öffnen: https://rks-creator.github.io/ReaderApp/
 2. **Teilen** → **Zum Home-Bildschirm** → **Hinzufügen**.
 3. Die App über das neue Symbol starten. Ab jetzt funktioniert sie auch im Flugmodus.
 
