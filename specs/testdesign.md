@@ -46,9 +46,10 @@ Testnamen beginnen immer mit der TC-ID: `it('TC-010 – …')`.
 | TC-009 | UC-003 | E2E | Weiterlesen öffnet die zuletzt gelesene Stelle |
 | TC-010 | UC-003 | CT | Inhaltsverzeichnis springt zum gewählten Kapitel |
 | TC-011 | UC-003 | UT | Bereinigung entfernt Skripte, Event-Handler und externe Ressourcen |
-| TC-012 | UC-003 | E2E | Kurzes Tippen auf ein Wort blättert nicht |
+| TC-012 | UC-003 | CT | Scrollbewegung öffnet kein Übersetzungs-Popup, kurzes Tippen schon |
 | TC-013 | UC-004 | UT | Lookup exakter Form („house“ → „Haus“) |
-| TC-014 | UC-004 | UT | Lemmatisierung: „mice“ → „mouse“, „running“ → „run“, „went“ → „go“ |
+| TC-014 | UC-004 | UT | Grundform: „went“ → „go“ (Ding-Angabe), „jumped“ → „jump“, „cities“ → „city“ (Endungsregeln) |
+| TC-022 | UC-004 | UT | Ding-Zeilen werden korrekt in Englisch→Deutsch-Einträge umgewandelt (Synonyme, Annotationen, Verben mit „to“) |
 | TC-015 | UC-004 | UT | Satzzeichen und Grossschreibung werden ignoriert |
 | TC-016 | UC-004 | UT | Unbekanntes Wort liefert „kein Eintrag“ |
 | TC-017 | UC-004 | E2E | Tippen auf Wort zeigt Popup in < 300 ms, auch offline |

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#8a4b14"/>
+  <path d="M96 150c56-22 112-22 160 10v220c-48-32-104-32-160-10z" fill="#fbf8f1"/>
+  <path d="M416 150c-56-22-112-22-160 10v220c48-32 104-32 160-10z" fill="#f1e5cc"/>
+  <rect x="290" y="96" width="150" height="92" rx="24" fill="#f4d58d"/>
+  <path d="M322 188l-14 36 46-36z" fill="#f4d58d"/>
+  <text x="365" y="158" font-family="Helvetica, Arial, sans-serif" font-size="52" font-weight="700" text-anchor="middle" fill="#3b2f1e">DE</text>
+</svg>

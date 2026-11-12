@@ -26,7 +26,7 @@ completeness: Minimum
 
 ## Context & Background
 
-> Das ist die Kernfunktion der ReaderApp. Eine Web-App kann das Systemwörterbuch des iPads nicht aufrufen; das ginge nur über das Kontextmenü („Nachschlagen“), was der Leser ausdrücklich nicht möchte. Deshalb bringt die ReaderApp ein eigenes Englisch-Deutsch-Wörterbuch mit, das beim ersten Start zusammen mit der App auf dem iPad gespeichert wird und danach offline funktioniert. Im Text stehen Wörter oft in gebeugter Form („running“, „mice“, „went“); das System führt sie auf die Grundform zurück („run“, „mouse“, „go“), bevor es nachschlägt.
+> Das ist die Kernfunktion der ReaderApp. Eine Web-App kann das Systemwörterbuch des iPads nicht aufrufen; das ginge nur über das Kontextmenü („Nachschlagen“), was der Leser ausdrücklich nicht möchte. Deshalb bringt die ReaderApp ein eigenes Englisch-Deutsch-Wörterbuch mit (Ding der TU Chemnitz, Lizenz GPL; Herkunft und Lizenz werden in der App unter „Info“ genannt), das beim ersten Start zusammen mit der App auf dem iPad gespeichert wird und danach offline funktioniert. Im Text stehen Wörter oft in gebeugter Form („running“, „mice“, „went“); das System führt sie auf die Grundform zurück („run“, „mouse“, „go“), bevor es nachschlägt.
 
 ---
 
@@ -48,7 +48,7 @@ completeness: Minimum
 1. Der Leser tippt kurz auf ein Wort.
 2. Das System bestimmt das angetippte Wort ohne Satzzeichen und hebt es farbig hervor.
 3. Das System schlägt das Wort in Kleinschreibung im Wörterbuch nach. *(→ A1)*
-4. Das System zeigt direkt beim Wort ein Popup mit dem englischen Wort, der Wortart (falls bekannt) und den häufigsten deutschen Übersetzungen (höchstens 5).
+4. Das System zeigt direkt beim Wort ein Popup mit dem englischen Wort, der Wortart (falls bekannt) und bis zu 5 deutschen Übersetzungen. Ist das Wort eine gebeugte Form, zeigt es zusätzlich die Grundform mit deren Übersetzungen (→ A1).
 5. Der Leser tippt ausserhalb des Popups oder auf ein anderes Wort. *(→ A3)*
 6. Das System schliesst das Popup und entfernt die Hervorhebung.
 
@@ -60,9 +60,9 @@ completeness: Minimum
 
 > Entry point: Schritt 3 des Hauptflusses
 
-1. A1.1: Das System findet keinen Eintrag für die Form im Text.
-2. A1.2: Das System ermittelt mögliche Grundformen (unregelmässige Formen aus einer Liste, regelmässige über Endungsregeln wie -s, -es, -ies, -ed, -ing, -er, -est).
-3. A1.3: Das System schlägt die Grundformen der Reihe nach nach und zeigt den ersten Treffer; im Popup steht „running → run“. *(→ E1)*
+1. A1.1: Das System ermittelt mögliche Grundformen (unregelmässige Formen aus den Ding-Angaben wie „to go {went; gone}“, regelmässige über Endungsregeln wie -s, -es, -ies, -ed, -ing, -er, -est).
+2. A1.2: Das System schlägt die Grundformen der Reihe nach nach und zeigt den ersten Treffer unter der Überschrift „running → run“.
+3. A1.3: Gibt es weder für die Form im Text noch für eine Grundform einen Eintrag, gilt E1.
 
 ### A2 – Wendung aus mehreren Wörtern
 
@@ -118,10 +118,15 @@ Scenario: Wort antippen zeigt Übersetzung
   When  der Leser auf "house" tippt
   Then  zeigt ein Popup die Übersetzung "Haus"
 
-Scenario: Gebeugte Form wird auf Grundform zurückgeführt
-  Given der Text enthält das Wort "mice"
-  When  der Leser auf "mice" tippt
-  Then  zeigt das Popup "mice → mouse" und die Übersetzung "Maus"
+Scenario: Unregelmässige Form wird auf Grundform zurückgeführt
+  Given der Text enthält das Wort "went"
+  When  der Leser auf "went" tippt
+  Then  zeigt das Popup "went → go" und die Übersetzung "gehen"
+
+Scenario: Regelmässige Form wird auf Grundform zurückgeführt
+  Given der Text enthält das Wort "jumped"
+  When  der Leser auf "jumped" tippt
+  Then  zeigt das Popup "jumped → jump" und die Übersetzung "springen"
 
 Scenario: Satzzeichen werden ignoriert
   Given der Text enthält "house," mit einem Komma
@@ -160,5 +165,4 @@ Scenario: Übersetzung offline
 
 ## Open Items
 
-- [ ] OPEN: Welche Wörterbuchquelle? Vorschlag: Ding (TU Chemnitz, ca. 200 000 Einträge, Lizenz GPL) oder WikDict (aus Wiktionary, Lizenz CC BY-SA). Beide sind kostenlos und offline nutzbar; die Lizenz muss in der App genannt werden.
 - [ ] OPEN: Soll man Wörter in einer Vokabelliste speichern können? Vorerst ausserhalb des Umfangs.

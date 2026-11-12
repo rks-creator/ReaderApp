@@ -1,0 +1,29 @@
+# Version :: Testauszug
+# Kleiner Auszug im Ding-Format (Deutsch :: Englisch) für Tests und Entwicklung ohne Internet.
+# Quelle des Formats: Ding, TU Chemnitz, GPL Version 2 or later
+Haus {n} | Häuser {pl} | ein Haus bauen :: house | houses | to build a house
+Geschlecht {n}; Familie {f} [hist.] :: house
+gehen {vi} | gehend | gegangen | ich/er/sie ging :: to go {went; gone} | going | gone | I/he/she went
+springen {vi} | springend | gesprungen :: to jump | jumping | jumped
+Sprung {m} | Sprünge {pl} :: jump | jumps
+Maus {f} [zool.] | Mäuse {pl} :: mouse | mice
+Stadt {f}; Großstadt {f} | Städte {pl} :: city | cities
+etw. sagen; etw. äußern {vt} | sagend | gesagt :: to say sth. {said; said} | saying | said
+etw. aufgeben {vt} | aufgebend | aufgegeben :: to give up sth. | giving up | given up
+geben {vt} | gebend | gegeben :: to give {gave; given} | giving | given
+Buch {n} | Bücher {pl} :: book | books
+Bild {n} | Bilder {pl} :: picture | pictures
+Schwester {f} | Schwestern {pl} :: sister | sisters
+müde {adj} :: tired
+schön {adj} :: beautiful
+Kaninchen {n} [zool.] | Kaninchen {pl} :: rabbit | rabbits
+Ufer {n} | Ufer {pl} :: bank | banks
+Bank {f} [fin.] | Banken {pl} :: bank | banks
+Gespräch {n}; Unterhaltung {f} | Gespräche {pl} :: conversation | conversations
+glücklich {adj} | glücklicher | am glücklichsten :: happy | happier | happiest
+schnell {adv} :: quickly
+der; die; das :: the
+Uhr {f} | Uhren {pl} :: watch; clock | watches; clocks
+Weste {f} | Westen {pl} :: waistcoat [Br.]; vest [Am.] | waistcoats; vests
+Wunderland {n} :: wonderland
+Abenteuer {n} | Abenteuer {pl} :: adventure | adventures

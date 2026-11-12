@@ -2,7 +2,7 @@
 id: UC-003
 type: Use Case
 name: "Buch lesen"
-completeness: Minimum
+completeness: Intermediate
 ---
 
 # UC-003 – Buch lesen
@@ -19,14 +19,14 @@ completeness: Minimum
 
 | Actor | Type | Role |
 |---|---|---|
-| Leser | `Human` | Liest, blättert und navigiert im Buch |
+| Leser | `Human` | Liest, scrollt und navigiert im Buch |
 | System | `System` | Stellt die Kapitel dar und speichert den Lesefortschritt |
 
 ---
 
 ## Context & Background
 
-> Ein EPUB besteht aus mehreren XHTML-Kapiteln. Die ReaderApp stellt immer ein Kapitel dar. Inhalte aus dem EPUB werden vor der Anzeige bereinigt (keine Skripte, keine externen Ressourcen), weil eine EPUB-Datei beliebigen Code enthalten kann. Jedes Wort im Text ist antippbar (UC-004); deshalb darf ein einfaches Tippen auf den Text **nicht** blättern.
+> Ein EPUB besteht aus mehreren XHTML-Kapiteln. Die ReaderApp stellt immer ein Kapitel als fortlaufend scrollbaren Text dar. Inhalte aus dem EPUB werden vor der Anzeige bereinigt (keine Skripte, keine externen Ressourcen), weil eine EPUB-Datei beliebigen Code enthalten kann. Jedes Wort im Text ist antippbar (UC-004); Scrollen und Antippen müssen sich deshalb sicher unterscheiden lassen.
 
 ---
 
@@ -46,13 +46,14 @@ completeness: Minimum
 ## Description
 
 1. Das System lädt das Buch aus IndexedDB. *(→ E1)*
-2. Das System öffnet das Kapitel und die Position des gespeicherten Lesefortschritts; ohne gespeicherten Fortschritt den Anfang des ersten Kapitels.
+2. Das System öffnet das Kapitel des gespeicherten Lesefortschritts und scrollt an die gespeicherte Position; ohne gespeicherten Fortschritt den Anfang des ersten Kapitels.
 3. Das System stellt den Kapiteltext mit den aktuellen Leseeinstellungen (UC-005) dar.
-4. Der Leser blättert mit einer Wischgeste nach links bzw. rechts oder durch Tippen auf den linken bzw. rechten Bildschirmrand. *(→ A1, A2)*
-5. Das System zeigt die nächste bzw. vorherige Seite; am Kapitelende folgt das nächste Kapitel.
-6. Das System speichert die aktuelle Position spätestens 2 s nach jedem Blättern.
-7. Der Leser tippt auf „Zurück zur Bibliothek“.
-8. Das System zeigt die Bibliothek (UC-002) mit aktualisiertem Lesefortschritt.
+4. Der Leser scrollt mit dem Finger durch den Text. *(→ A1, A2)*
+5. Das System speichert die aktuelle Position spätestens 2 s nach dem Ende einer Scrollbewegung.
+6. Am Kapitelende tippt der Leser auf „Nächstes Kapitel“. *(→ A3)*
+7. Das System zeigt den Anfang des nächsten Kapitels.
+8. Der Leser tippt auf „Zurück zur Bibliothek“.
+9. Das System zeigt die Bibliothek (UC-002) mit aktualisiertem Lesefortschritt.
 
 ---
 
@@ -67,19 +68,19 @@ completeness: Minimum
 3. A1.3: Der Leser tippt auf ein Kapitel.
 4. A1.4: Das System zeigt den Anfang dieses Kapitels und speichert die Position.
 
-### A2 – Bedienleiste ein- und ausblenden
+### A2 – Vorheriges Kapitel
 
 > Entry point: Schritt 4 des Hauptflusses
 
-1. A2.1: Der Leser tippt in den oberen Bildschirmbereich ausserhalb des Textes.
-2. A2.2: Das System blendet die Bedienleiste (Zurück, Inhaltsverzeichnis, Einstellungen, Fortschritt) ein bzw. aus.
+1. A2.1: Der Leser tippt am Kapitelanfang auf „Vorheriges Kapitel“.
+2. A2.2: Das System zeigt das Ende des vorherigen Kapitels.
 
 ### A3 – Buch zu Ende gelesen
 
-> Entry point: Schritt 5 des Hauptflusses
+> Entry point: Schritt 6 des Hauptflusses
 
-1. A3.1: Der Leser blättert auf der letzten Seite des letzten Kapitels weiter.
-2. A3.2: Das System zeigt „Ende des Buches“ und setzt den Fortschritt auf 100 %.
+1. A3.1: Der Leser ist am Ende des letzten Kapitels.
+2. A3.2: Das System zeigt statt „Nächstes Kapitel“ den Hinweis „Ende des Buches“ und setzt den Fortschritt auf 100 %.
 
 ---
 
@@ -90,7 +91,7 @@ completeness: Minimum
 > Entry point: Schritt 1 des Hauptflusses
 
 1. E1.1: Das System meldet „Dieses Kapitel konnte nicht angezeigt werden.“
-2. E1.2: Der Leser kann zum nächsten Kapitel blättern oder zur Bibliothek zurückkehren.
+2. E1.2: Der Leser kann zum nächsten Kapitel wechseln oder zur Bibliothek zurückkehren.
 
 ---
 
@@ -111,23 +112,23 @@ completeness: Minimum
 
 ```gherkin
 Scenario: Weiterlesen an der letzten Stelle
-  Given der Leser hat "Alice's Adventures in Wonderland" bis Kapitel 3 gelesen
+  Given der Leser hat "Alice's Adventures in Wonderland" bis zur Mitte von Kapitel 3 gelesen
   When  der Leser das Buch in der Bibliothek antippt
-  Then  zeigt das System die zuletzt gelesene Stelle in Kapitel 3
+  Then  zeigt das System Kapitel 3 an der zuletzt gelesenen Stelle
 
 Scenario: Über das Inhaltsverzeichnis springen
   Given das Buch "Alice's Adventures in Wonderland" ist geöffnet
   When  der Leser im Inhaltsverzeichnis "Chapter V" antippt
   Then  zeigt das System den Anfang von "Chapter V"
 
-Scenario: Tippen auf ein Wort blättert nicht
-  Given das Buch ist auf Seite 5 geöffnet
-  When  der Leser auf ein Wort in der Bildschirmmitte tippt
-  Then  bleibt Seite 5 sichtbar
+Scenario: Scrollen öffnet keine Übersetzung
+  Given ein Buch ist geöffnet
+  When  der Leser mit dem Finger über den Text scrollt
+  Then  erscheint kein Übersetzungs-Popup
 
 Scenario: Defektes Kapitel
   Given das Buch enthält ein Kapitel mit fehlerhaftem XHTML
-  When  der Leser zu diesem Kapitel blättert
+  When  der Leser dieses Kapitel öffnet
   Then  meldet das System "Dieses Kapitel konnte nicht angezeigt werden."
 ```
 
@@ -147,9 +148,3 @@ Scenario: Defektes Kapitel
 
 - **Depends on**: UC-001 (Buch importieren), UC-002 (Bibliothek anzeigen)
 - **Included Use Cases**: UC-004 (Wort übersetzen), UC-005 (Leseeinstellungen anpassen)
-
----
-
-## Open Items
-
-- [ ] OPEN: Seitenweise blättern (wie ein Buch) oder fortlaufend scrollen? Spezifiziert ist vorerst Blättern; Scrollen wäre einfacher umzusetzen.

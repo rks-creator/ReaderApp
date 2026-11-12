@@ -34,7 +34,7 @@ src/
   app/                  App-Shell, Navigation, Update-Hinweis, Fehlergrenze
   features/
     library/            UC-001, UC-002 – Bibliothek, Import
-    reader/             UC-003 – Leseansicht, Blättern, Inhaltsverzeichnis
+    reader/             UC-003 – Leseansicht (Scrollen), Inhaltsverzeichnis
     dictionary/         UC-004 – Wort-Erkennung beim Tippen, Popup
     settings/           UC-005 – Leseeinstellungen
   lib/
@@ -55,21 +55,23 @@ Regeln:
 ## Wort-Tippen (Kernmechanik)
 
 1. Der Kapiteltext wird bereinigt und in einen Container gerendert.
-2. Ein `pointerup`-Handler am Container ermittelt über `document.caretRangeFromPoint`
-   die Position und erweitert sie auf Wortgrenzen (`Intl.Segmenter` mit `granularity: 'word'`).
-3. Ein kurzes Tippen (< 300 ms, Bewegung < 10 px) gilt als Wort-Tippen; Wischen blättert.
+2. Beim Rendern wird jedes Wort (`Intl.Segmenter`, `granularity: 'word'`) in ein
+   `<span class="w">` gelegt; das angetippte Wort ist damit direkt `event.target`.
+3. Ein kurzes Tippen (< 500 ms, Bewegung < 10 px) gilt als Wort-Tippen; jede grössere
+   Bewegung oder ein `pointercancel` (Browser übernimmt das Scrollen) nicht.
 4. `user-select: none` und `-webkit-touch-callout: none` auf dem Lesecontainer verhindern
    das System-Kontextmenü.
-5. Lookup: exakte Form → Grundformen (Liste unregelmässiger Formen + Endungsregeln) →
+5. Lookup: exakte Form → Grundformen (unregelmässige Formen aus Ding + Endungsregeln) →
    Wendungen mit Nachbarwörtern.
 
 ## Wörterbuch
 
-- Quelle wird beim Build im GitHub-Actions-Workflow heruntergeladen und in kompakte
-  JSON-Dateien umgewandelt (aufgeteilt nach Anfangsbuchstaben, damit der Start schnell bleibt).
+- Quelle: Ding (TU Chemnitz, `de-en.txt`, GPL). Sie wird beim Build im GitHub-Actions-Workflow
+  heruntergeladen und von `scripts/build-dictionary.ts` in kompakte JSON-Dateien umgewandelt
+  (aufgeteilt nach Anfangsbuchstaben, damit der Start schnell bleibt).
+- Ohne Internetzugang verwendet das Skript das kleine Test-Wörterbuch aus `tests/fixtures/`.
 - Die Dateien liegen unter `public/dict/` und sind im Precache des Service Workers.
 - Lizenz und Herkunft werden in der App unter „Info“ angezeigt.
-- Offene Entscheidung zur Quelle: siehe UC-004, Open Items.
 
 ## Datenmodell (IndexedDB `readerapp`)
 

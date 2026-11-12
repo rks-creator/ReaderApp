@@ -3,15 +3,23 @@
 Englische EPUB-Bücher auf dem iPad lesen – ein Wort antippen und sofort die deutsche
 Übersetzung sehen. Offline, ohne App Store, ohne Konto, ohne Tracking.
 
-> Status: Spezifikation. Die erste lauffähige Version folgt.
+> Status: erste Version (UC-001 bis UC-006 umgesetzt).
 
 ## Auf dem iPad nutzen
 
-1. Die Adresse der App in **Safari** öffnen (wird nach dem ersten Deployment hier ergänzt).
+1. Die Adresse der App in **Safari** öffnen: https://rks-creator.github.io/readerapp/
 2. **Teilen** → **Zum Home-Bildschirm** → **Hinzufügen**.
 3. Die App über das neue Symbol starten. Ab jetzt funktioniert sie auch im Flugmodus.
 
 Deine Bücher werden nur auf deinem iPad gespeichert und nie hochgeladen.
+
+Beim ersten Öffnen lädt die App das Wörterbuch (rund 6 MB übertragen, 23 MB im Speicher).
+Danach funktioniert alles offline.
+
+## Wörterbuch
+
+Ding – Deutsch-Englisch-Wörterbuch der TU Chemnitz (© Frank Richter, GPL Version 2 oder später,
+https://dict.tu-chemnitz.de/). Es wird beim Build heruntergeladen und nicht im Repository gespeichert.
 
 ## Entwicklung
 

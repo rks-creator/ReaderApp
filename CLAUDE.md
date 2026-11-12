@@ -49,3 +49,12 @@ npm run typecheck
 | `traceability-manager` | UC ↔ Code ↔ Test-Zuordnung pflegen |
 | `clean-code-review` | Clean Code + Spec-Konformität für TypeScript/React |
 | `ipad-pwa-check` | Build mit Playwright in iPad-Emulation prüfen, Offline-Test, Screenshots |
+
+## Plugins Superpowers und Ralph Loop
+
+- **Superpowers** (TDD, systematisches Debugging, Pläne, Verifikation) darf genutzt werden.
+  Anforderungen stehen aber **ausschliesslich in `specs/`**. Pläne und Brainstorming-Ergebnisse
+  aus Superpowers sind Arbeitsschritte und ersetzen keine Use Cases; neue Anforderungen
+  werden immer als UC in `specs/` erfasst.
+- **Ralph Loop** nur auf ausdrücklichen Wunsch des Benutzers und nur für klar prüfbare Ziele
+  (z. B. „bis TC-013 bis TC-017 grün sind“), immer mit `--max-iterations`.
