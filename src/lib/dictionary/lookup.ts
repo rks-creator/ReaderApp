@@ -93,6 +93,59 @@ export class Dictionary {
     }
     return { word, groups };
   }
+
+  /**
+   * UC-007 Stufe 1: Eine markierte Wortgruppe ist entweder eine Ding-Wendung (auch mit dem
+   * ersten Wort in der Grundform, „gave up“ → „give up“) oder wird Wort für Wort übersetzt.
+   */
+  async lookupSelection(rawWords: string[]): Promise<SelectionLookup> {
+    const words = rawWords.map(normalizeWord).filter(Boolean);
+    try {
+      const phrase = await this.phraseEntry(words);
+      if (phrase) return { phrase, words: [] };
+      const perWord = await Promise.all(words.map(async (word) => ({ word, translation: await this.firstTranslation(word) })));
+      return { words: perWord };
+    } catch (error) {
+      throw new DictionaryUnavailableError(error);
+    }
+  }
+
+  private async phraseEntry(words: string[]): Promise<LookupGroup | undefined> {
+    const [first, ...rest] = words;
+    if (!first || rest.length === 0 || words.length > MAX_PHRASE_WORDS) return undefined;
+    const exactKey = words.join(' ');
+    const exact = await this.entry(exactKey);
+    if (exact?.length) return { headword: exactKey, translations: exact };
+    for (const base of baseFormsOf(first, await this.irregularForms())) {
+      const key = [base, ...rest].join(' ');
+      const translations = await this.entry(key);
+      if (translations?.length) return { headword: key, inflectedFrom: exactKey, translations };
+    }
+    return undefined;
+  }
+
+  private async firstTranslation(word: string): Promise<SelectionWord['translation']> {
+    const exact = await this.entry(word);
+    if (exact?.[0]) return exact[0];
+    for (const base of baseFormsOf(word, await this.irregularForms())) {
+      const translations = await this.entry(base);
+      if (translations?.[0]) return translations[0];
+    }
+    return undefined;
+  }
+}
+
+/** Ding-Schlüssel haben höchstens 4 Wörter (siehe ding.ts). */
+const MAX_PHRASE_WORDS = 4;
+
+export interface SelectionWord {
+  word: string;
+  translation?: LookupGroup['translations'][number];
+}
+
+export interface SelectionLookup {
+  phrase?: LookupGroup;
+  words: SelectionWord[];
 }
 
 /** Lädt das Wörterbuch aus `<base>dict/`, wie es `scripts/build-dictionary.ts` erzeugt. */

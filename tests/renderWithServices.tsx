@@ -5,6 +5,7 @@ import { ServicesProvider } from '../src/app/services';
 import { parseDing, splitIntoShards } from '../src/lib/dictionary/ding';
 import { Dictionary } from '../src/lib/dictionary/lookup';
 import { LibraryStore } from '../src/lib/storage/db';
+import type { SentenceTranslator } from '../src/lib/translation/translator';
 
 let dbCounter = 0;
 
@@ -18,8 +19,19 @@ export async function freshStore(): Promise<LibraryStore> {
   return LibraryStore.open(`component-test-${dbCounter++}`);
 }
 
-export function renderWithServices(ui: ReactElement, store: LibraryStore | null) {
-  return render(<ServicesProvider services={{ store, dictionary: sampleDictionary() }}>{ui}</ServicesProvider>);
+/** Übersetzer für Tests: liefert „DE: <Text>“, ohne Modell. */
+export function fakeTranslator(overrides: Partial<SentenceTranslator> = {}): SentenceTranslator {
+  return {
+    isModelStored: async () => true,
+    translate: async (text) => `DE: ${text}`,
+    ...overrides,
+  };
+}
+
+export function renderWithServices(ui: ReactElement, store: LibraryStore | null, translator = fakeTranslator()) {
+  return render(
+    <ServicesProvider services={{ store, dictionary: sampleDictionary(), translator }}>{ui}</ServicesProvider>,
+  );
 }
 
 export async function epubFile(bytes: Uint8Array, name = 'alice.epub'): Promise<File> {

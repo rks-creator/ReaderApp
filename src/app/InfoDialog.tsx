@@ -33,6 +33,11 @@ export function InfoDialog({ onClose }: { onClose: () => void }) {
             {meta.entries.toLocaleString('de-CH')} Einträge
           </p>
         )}
+        <h3>Satzübersetzung</h3>
+        <p>
+          Bergamot Translator und Übersetzungsmodell Englisch → Deutsch von Mozilla und dem Bergamot-Projekt, Mozilla
+          Public License 2.0. Die Übersetzung läuft vollständig auf diesem Gerät.
+        </p>
         <button type="button" className="button" onClick={onClose}>
           Schliessen
         </button>

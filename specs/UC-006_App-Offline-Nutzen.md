@@ -135,7 +135,7 @@ Scenario: Verbindungsabbruch beim ersten Laden
 |---|---|
 | Kosten | Hosting und Nutzung sind kostenlos (GitHub Pages, öffentliches Repository). |
 | Datenschutz | Die App sendet keine Daten an Server; es gibt kein Tracking. |
-| Grösse | App und Wörterbuch zusammen sind höchstens 30 MB gross. |
+| Grösse | App und Wörterbuch zusammen sind höchstens 30 MB gross; die optionale Satzübersetzung (UC-007) kommt bei Gebrauch mit höchstens 30 MB dazu. |
 
 ---
 

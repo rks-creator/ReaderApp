@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
 import { useServices } from '../../app/services';
 import { wrapWords } from '../../lib/epub/wrapWords';
 import { percentOf, type ReaderSettings } from '../../lib/storage/db';
 import { TranslationPopup } from '../dictionary/TranslationPopup';
 import { useWordTap } from '../dictionary/useWordTap';
+import { SelectionPopup } from '../selection/SelectionPopup';
+import { useTextSelection } from '../selection/useTextSelection';
 import { SettingsPanel } from '../settings/SettingsPanel';
 import { useSettings } from '../settings/useSettings';
 import { firstVisibleWord, scrollFraction, scrollToElement, scrollToFraction } from './scrollAnchor';
@@ -31,7 +33,32 @@ function BookReader({ book, onBack }: { book: OpenBook; onBack: () => void }) {
   const position = useRef({ chapterIndex, fraction: book.initialProgress?.position ?? 0 });
   const anchorWord = useRef<HTMLElement | undefined>(undefined);
   const saveTimer = useRef<number | undefined>(undefined);
-  const { popup, close: closePopup, handlers } = useWordTap(content);
+  const tap = useWordTap(content);
+  const selection = useTextSelection(content, {
+    onBegin: tap.close,
+    onSingleWord: (word) => void tap.translateWord(word),
+  });
+  const closePopup = () => {
+    tap.close();
+    selection.close();
+  };
+  // UC-004 (Tippen) und UC-007 (lange drücken und ziehen) teilen sich die Zeiger-Ereignisse.
+  const textHandlers = {
+    onPointerDown: (event: PointerEvent) => {
+      tap.handlers.onPointerDown(event);
+      selection.handlers.onPointerDown(event);
+    },
+    onPointerMove: selection.handlers.onPointerMove,
+    onPointerUp: (event: PointerEvent) => {
+      if (selection.handlers.onPointerUp()) return;
+      selection.close();
+      tap.handlers.onPointerUp(event);
+    },
+    onPointerCancel: () => {
+      tap.handlers.onPointerCancel();
+      selection.handlers.onPointerUp();
+    },
+  };
 
   const saveProgress = useCallback(
     (index: number, position: number) => {
@@ -145,7 +172,7 @@ function BookReader({ book, onBack }: { book: OpenBook; onBack: () => void }) {
             lang={book.record.language || 'en'}
             data-testid="chapter"
             hidden={error}
-            {...handlers}
+            {...textHandlers}
           />
           {isLastChapter ? (
             <p className="reader__end">Ende des Buches</p>
@@ -157,7 +184,8 @@ function BookReader({ book, onBack }: { book: OpenBook; onBack: () => void }) {
         </article>
       </div>
 
-      {popup && <TranslationPopup state={popup.state} anchor={popup.anchor} />}
+      {tap.popup && <TranslationPopup state={tap.popup.state} anchor={tap.popup.anchor} />}
+      {selection.popup && <SelectionPopup state={selection.popup} />}
       {panel === 'toc' && (
         <TocPanel
           toc={book.record.toc}

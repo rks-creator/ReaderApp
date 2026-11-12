@@ -34,3 +34,4 @@ Anforderungen.
 | UC-004 | Wort übersetzen |
 | UC-005 | Leseeinstellungen anpassen |
 | UC-006 | App offline nutzen |
+| UC-007 | Textstelle übersetzen |

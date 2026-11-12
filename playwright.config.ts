@@ -2,7 +2,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 const BASE_PATH = '/readerapp/';
 const PORT = 4173;
-const OFFLINE = /TC-020/;
+/** Tests, die im Offline-Modus neu laden (siehe Kommentar bei „iPad offline“). */
+const OFFLINE = /TC-020|Satzübersetzung offline/;
 // Auf dem iPad läuft WebKit; lokal ohne WebKit kann PW_BROWSER=chromium gesetzt werden.
 const browserName = (process.env.PW_BROWSER ?? 'webkit') as 'webkit' | 'chromium';
 

@@ -50,6 +50,9 @@ npm run typecheck
 | `clean-code-review` | Clean Code + Spec-Konformität für TypeScript/React |
 | `ipad-pwa-check` | Build mit Playwright in iPad-Emulation prüfen, Offline-Test, Screenshots |
 
+Hinweis: `npm run build:dict` (Ding) und `npm run build:mt` (Satzübersetzung) laden Daten aus dem
+Internet nach `public/`; beide Ordner sind nicht im Repository.
+
 ## Plugins Superpowers und Ralph Loop
 
 - **Superpowers** (TDD, systematisches Debugging, Pläne, Verifikation) darf genutzt werden.

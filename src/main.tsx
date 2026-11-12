@@ -5,18 +5,20 @@ import { ServicesProvider } from './app/services';
 import './app/styles.css';
 import { Dictionary, fetchDictionarySource } from './lib/dictionary/lookup';
 import { LibraryStore } from './lib/storage/db';
+import { createBergamotTranslator } from './lib/translation/translator';
 
 async function start(): Promise<void> {
   const store = await LibraryStore.open().catch(() => null);
   // UC-006: iPadOS darf Daten von Web-Apps löschen; dauerhafter Speicher macht das unwahrscheinlicher.
   void navigator.storage?.persist?.().catch(() => false);
   const dictionary = new Dictionary(fetchDictionarySource(import.meta.env.BASE_URL));
+  const translator = createBergamotTranslator(import.meta.env.BASE_URL);
 
   const root = document.getElementById('root');
   if (!root) throw new Error('#root fehlt');
   createRoot(root).render(
     <StrictMode>
-      <ServicesProvider services={{ store, dictionary }}>
+      <ServicesProvider services={{ store, dictionary, translator }}>
         <App />
       </ServicesProvider>
     </StrictMode>,

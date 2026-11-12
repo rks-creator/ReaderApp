@@ -13,10 +13,12 @@
     "test:e2e": "playwright test",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.node.json",
-    "prebuild": "tsx scripts/build-dictionary.ts --if-missing",
-    "predev": "tsx scripts/build-dictionary.ts --if-missing"
+    "prebuild": "tsx scripts/build-dictionary.ts --if-missing && tsx scripts/fetch-translation-model.ts --if-missing",
+    "predev": "tsx scripts/build-dictionary.ts --if-missing && tsx scripts/fetch-translation-model.ts --if-missing",
+    "build:mt": "tsx scripts/fetch-translation-model.ts"
   },
   "dependencies": {
+    "@browsermt/bergamot-translator": "0.4.9",
     "dompurify": "^3.4.17",
     "idb": "^8.0.4",
     "jszip": "^3.10.2",

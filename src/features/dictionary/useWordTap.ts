@@ -75,5 +75,5 @@ export function useWordTap(container: React.RefObject<HTMLElement | null>) {
     [translate, close],
   );
 
-  return { popup, close, handlers: { onPointerDown, onPointerUp, onPointerCancel } };
+  return { popup, close, translateWord: translate, handlers: { onPointerDown, onPointerUp, onPointerCancel } };
 }

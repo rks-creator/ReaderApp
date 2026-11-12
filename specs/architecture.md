@@ -24,6 +24,7 @@ eines Wortes sofort die deutsche Übersetzung zeigt – offline, ohne App Store,
 | EPUB | `JSZip` zum Entpacken, eigener Parser für OPF/NCX/Navigation (DOMParser) |
 | Bereinigung | `DOMPurify` für Kapitel-XHTML |
 | Speicher | IndexedDB über `idb` |
+| Satzübersetzung | Bergamot (`@browsermt/bergamot-translator`, WebAssembly im Web Worker, MPL 2.0) mit Modell Englisch → Deutsch |
 | Tests | Vitest + Testing Library (Unit/Komponenten), Playwright mit iPad-Emulation (E2E) |
 | Deployment | GitHub Actions → GitHub Pages |
 
@@ -37,12 +38,15 @@ src/
     reader/             UC-003 – Leseansicht (Scrollen), Inhaltsverzeichnis
     dictionary/         UC-004 – Wort-Erkennung beim Tippen, Popup
     settings/           UC-005 – Leseeinstellungen
+    selection/          UC-007 – Textstelle markieren und übersetzen
   lib/
     epub/               EPUB entpacken, Metadaten, Kapitel, Bereinigung
     storage/            IndexedDB-Schema und Zugriffe
     dictionary/         Wörterbuch laden, Lookup, Grundformbildung (Lemmatisierung)
+    translation/        Satzübersetzung (Bergamot) hinter einer schmalen Schnittstelle
 scripts/
   build-dictionary.ts   erzeugt public/dict/ aus der Wörterbuchquelle (im CI)
+  fetch-translation-model.ts  lädt Engine und Modell nach public/mt/ (im CI)
 tests/fixtures/         Test-EPUBs, kleines Test-Wörterbuch
 e2e/                    Playwright-Tests
 ```
@@ -72,6 +76,18 @@ Regeln:
 - Ohne Internetzugang verwendet das Skript das kleine Test-Wörterbuch aus `tests/fixtures/`.
 - Die Dateien liegen unter `public/dict/` und sind im Precache des Service Workers.
 - Lizenz und Herkunft werden in der App unter „Info“ angezeigt.
+
+## Satzübersetzung (UC-007)
+
+- Engine: `@browsermt/bergamot-translator` (WebAssembly, ein Web Worker, keine Threads –
+  braucht daher kein `SharedArrayBuffer` und keine COOP/COEP-Header, die GitHub Pages nicht setzen kann).
+- Modell Englisch → Deutsch von Mozilla (`model.ende.intgemm.alphas.bin`, `lex.50.50.ende.s2t.bin`,
+  `vocab.deen.spm`, zusammen ca. 22 MB). `scripts/fetch-translation-model.ts` lädt die Dateien beim
+  Build, prüft die SHA-256-Prüfsummen und legt sie mit einer eigenen `registry.json` unter `public/mt/` ab.
+- Engine und Modell sind **nicht** im Precache, sondern werden beim ersten Gebrauch geladen und vom
+  Service Worker per Cache-First gespeichert. So bleibt der erste Start klein.
+- Markieren: Langes Drücken (0,5 s ohne Bewegung) startet die Auswahl; ab dann verhindert ein
+  nicht-passiver `touchmove`-Listener das Scrollen, bis der Finger gehoben wird.
 
 ## Datenmodell (IndexedDB `readerapp`)
 

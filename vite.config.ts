@@ -33,8 +33,20 @@ export default defineConfig({
       workbox: {
         // UC-006: App-Shell und das gesamte Wörterbuch für den Offline-Betrieb vorhalten.
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}', 'dict/*.json'],
+        // UC-007: Engine und Modell (ca. 27 MB) erst beim ersten Gebrauch laden, dann dauerhaft speichern.
+        globIgnores: ['mt/**'],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.includes('/mt/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'satzuebersetzung',
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+        ],
       },
     }),
   ],

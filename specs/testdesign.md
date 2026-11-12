@@ -2,7 +2,7 @@
 
 ## Scope
 
-Abgedeckte Use Cases: UC-001 bis UC-006.
+Abgedeckte Use Cases: UC-001 bis UC-007.
 
 Ausserhalb des Scope:
 - Tests auf echten iPads – werden manuell anhand der Checkliste im Skill `ipad-pwa-check`
@@ -57,3 +57,9 @@ Testnamen beginnen immer mit der TC-ID: `it('TC-010 – …')`.
 | TC-019 | UC-005 | CT | Farbschema bleibt nach Neustart erhalten |
 | TC-020 | UC-006 | E2E | Start offline nach erstem Laden zeigt Bibliothek und übersetzt (Chromium im iPad-Profil, da Playwright-WebKit offline nicht neu laden kann; echtes iPad: manuell) |
 | TC-021 | UC-006 | E2E | Manifest, Icons und Apple-Meta-Tags vorhanden |
+| TC-023 | UC-007 | UT | Auswahl als Wendung: „gave up“ → Ding-Eintrag „give up“ (Grundform des ersten Wortes) |
+| TC-024 | UC-007 | UT | Auswahl ohne Wendung: je Wort die erste Übersetzung, unbekannte Wörter markiert |
+| TC-025 | UC-007 | CT | Langes Drücken und Ziehen markiert die Wörter dazwischen (vorwärts und rückwärts, max. 60) |
+| TC-026 | UC-007 | CT | Bewegung vor Ablauf der 0,5 s markiert nichts (Scrollen bleibt möglich) |
+| TC-027 | UC-007 | CT | Popup zeigt Wörterbuch sofort und Satzübersetzung, Ladehinweis und Fehlermeldungen |
+| TC-028 | UC-007 | E2E | Satz markieren → maschinelle Übersetzung enthält „Alice“ und „müde“ (echtes Modell) |

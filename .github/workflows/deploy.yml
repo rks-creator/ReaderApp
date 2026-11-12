@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - name: Wörterbuch (Ding) erzeugen
         run: npm run build:dict -- --require-ding
+      - name: Satzübersetzung (Engine und Modell) bereitstellen
+        run: npm run build:mt -- --require
       - run: npm run lint
       - run: npm test
       - name: Build für E2E-Tests
@@ -61,6 +63,8 @@ jobs:
       - run: npm ci
       - name: Wörterbuch (Ding) erzeugen
         run: npm run build:dict -- --require-ding
+      - name: Satzübersetzung (Engine und Modell) bereitstellen
+        run: npm run build:mt -- --require
       - id: pages
         uses: actions/configure-pages@v5
       - name: Build

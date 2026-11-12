@@ -1,7 +1,8 @@
 /**
  * Traceability:
  *   UC: UC-004 (Wort übersetzen)
- *   TCs: TC-013, TC-014, TC-015, TC-016, TC-022
+ *   UC: UC-007 (Textstelle übersetzen)
+ *   TCs: TC-013, TC-014, TC-015, TC-016, TC-022, TC-023, TC-024
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -109,5 +110,25 @@ describe('Nachschlagen', () => {
       loadForms: () => Promise.reject(new Error('offline')),
     };
     await expect(new Dictionary(failing).lookup('house')).rejects.toBeInstanceOf(DictionaryUnavailableError);
+  });
+});
+
+describe('Auswahl nachschlagen', () => {
+  it('TC-023 – erkennt eine Wendung, auch mit dem ersten Wort in der Grundform', async () => {
+    const dictionary = new Dictionary(memorySource());
+    const result = await dictionary.lookupSelection(['gave', 'up']);
+    expect(result.phrase).toMatchObject({ headword: 'give up', inflectedFrom: 'gave up' });
+    expect(result.phrase?.translations[0]?.[0]).toBe('aufgeben');
+    expect((await dictionary.lookupSelection(['give', 'up,'])).phrase?.headword).toBe('give up');
+  });
+
+  it('TC-024 – übersetzt sonst Wort für Wort und lässt unbekannte Wörter leer', async () => {
+    const result = await new Dictionary(memorySource()).lookupSelection(['The', 'happiest', 'Jabberwocky']);
+    expect(result.phrase).toBeUndefined();
+    expect(result.words).toEqual([
+      { word: 'the', translation: ['der; die; das', ''] },
+      { word: 'happiest', translation: ['am glücklichsten', ''] },
+      { word: 'jabberwocky', translation: undefined },
+    ]);
   });
 });

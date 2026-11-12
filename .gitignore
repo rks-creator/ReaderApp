@@ -7,3 +7,4 @@ test-results/
 public/dict/
 .DS_Store
 *.local
+public/mt/
