@@ -55,5 +55,5 @@ Testnamen beginnen immer mit der TC-ID: `it('TC-010 – …')`.
 | TC-017 | UC-004 | E2E | Tippen auf Wort zeigt Popup in < 300 ms, auch offline |
 | TC-018 | UC-005 | CT | Schriftgrösse ändern hält die erste sichtbare Textstelle sichtbar |
 | TC-019 | UC-005 | CT | Farbschema bleibt nach Neustart erhalten |
-| TC-020 | UC-006 | E2E | Start offline nach erstem Laden zeigt Bibliothek und übersetzt |
+| TC-020 | UC-006 | E2E | Start offline nach erstem Laden zeigt Bibliothek und übersetzt (Chromium im iPad-Profil, da Playwright-WebKit offline nicht neu laden kann; echtes iPad: manuell) |
 | TC-021 | UC-006 | E2E | Manifest, Icons und Apple-Meta-Tags vorhanden |

@@ -31,9 +31,9 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /readerapp/
-      - name: WebKit installieren
-        run: npx playwright install --with-deps webkit
-      - name: E2E-Tests (iPad, WebKit)
+      - name: Browser installieren (WebKit, Chromium)
+        run: npx playwright install --with-deps webkit chromium
+      - name: E2E-Tests (iPad)
         run: npx playwright test --trace off
       - uses: actions/upload-artifact@v4
         if: failure()
